@@ -73,3 +73,79 @@ The script is highly customizable, allowing users to include or exclude specific
 ## Compatibility
 
 Currently, this script is optimized for plasmids pET28 and pET29. For other plasmid constructs, modifications to the script may be required to ensure compatibility.
+
+
+---
+
+# Tips for Interpreting Protein Sequence Analysis Results
+
+## Hydrophobicity Score
+
+- **What It Is**: The hydrophobicity score, or GRAVY score, indicates the overall hydrophobic or hydrophilic nature of the protein. It is calculated as the average of the hydrophobicity values for each amino acid in the sequence.
+  
+- **How to Interpret**:
+  - **Positive Scores**: Suggest the protein is hydrophobic, which may indicate membrane association or poor solubility in aqueous environments.
+  - **Negative Scores**: Suggest the protein is hydrophilic and likely to be soluble in water, which is typically desirable for soluble protein expression.
+
+- **Considerations**:
+  - **Membrane Proteins**: Often have positive GRAVY scores due to their hydrophobic regions interacting with the lipid bilayer.
+  - **Soluble Proteins**: Negative GRAVY scores are typically more desirable for proteins intended to be soluble in aqueous environments.
+
+## Extinction Coefficients
+
+- **What They Are**: Extinction coefficients indicate how much light a protein absorbs at a specific wavelength (usually 280 nm), which is useful for estimating protein concentration using UV absorbance.
+
+- **Reduced vs. Oxidized**:
+  - **Reduced Extinction Coefficient**: Assumes all cysteine residues are in their reduced thiol form (`-SH`), meaning no disulfide bonds are present.
+  - **Oxidized Extinction Coefficient**: Assumes cysteine residues form disulfide bonds (`-S-S-`), which can slightly alter the absorption characteristics.
+
+- **How to Choose**:
+  - **Reduced Form**: Use this value if you expect your protein to have free cysteines (no disulfide bonds).
+  - **Oxidized Form**: Use this if you know your protein forms disulfide bonds, which is common in proteins expressed in the oxidative environment of the endoplasmic reticulum or outside the cell.
+
+## Molecular Weight
+
+- **What It Is**: The molecular weight of the protein is calculated based on the amino acid sequence and is expressed in Daltons (Da).
+
+- **How to Interpret**:
+  - Useful for verifying the size of the expressed protein by comparing with SDS-PAGE or mass spectrometry data.
+  - Discrepancies between the calculated and observed molecular weight may indicate post-translational modifications or other processing events.
+
+## Isoelectric Point (pI)
+
+- **What It Is**: The isoelectric point is the pH at which the protein carries no net electrical charge.
+
+- **How to Use**:
+  - The pI is important for designing purification protocols, particularly in ion exchange chromatography where the protein’s charge affects its interaction with the resin.
+  - Proteins are least soluble at their pI, so avoiding this pH during purification can prevent precipitation.
+
+## TEV Protease Cleavage
+
+- **What It Is**: TEV protease is often used to remove fusion tags from proteins. The script identifies potential TEV cleavage sites and provides the properties of the cleaved protein.
+
+- **How to Use**:
+  - Verify that TEV cleavage produces the expected protein fragment.
+  - Use the calculated properties of the cleaved protein to plan subsequent purification or characterization steps.
+
+By considering these factors, you can better interpret the results of the protein sequence analysis and make informed decisions about protein expression, purification, and functional studies.
+
+## Disulfide Bond Prediction
+
+### How It Works
+
+In this script, the prediction of disulfide bonds is based on a simple heuristic:
+
+- **Cysteine Residue Count**: The script counts the number of cysteine (`C`) residues in the protein sequence. Cysteine is the amino acid that can form disulfide bonds when oxidized.
+- **Basic Prediction Rule**: If the protein sequence contains two or more cysteine residues, the script assumes that disulfide bonds could potentially form. This is based on the idea that disulfide bonds require at least two cysteine residues to form a covalent bond (`Cys-S-S-Cys`).
+
+### Limitations
+
+- **Simplistic Approach**: This method is very basic and does not account for the actual spatial arrangement of cysteine residues within the protein. It only checks if there are enough cysteines to form at least one disulfide bond.
+- **No Structural Information**: The prediction does not consider the three-dimensional structure of the protein, which is critical for determining whether the cysteines are close enough to form disulfide bonds.
+
+### More Advanced Methods
+
+For more accurate disulfide bond predictions, especially in complex proteins or those with known structures, consider using more advanced tools:
+
+- **Structural Analysis**: Use structural data (from X-ray crystallography or NMR) to assess the proximity of cysteine residues in three-dimensional space.
+- **Machine Learning Tools**: Tools like **DiANNA** or **DISULFIND** use sequence-based features and machine learning models to predict disulfide bonds more accurately, considering the likelihood and connectivity of potential bonds.
